@@ -18,6 +18,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "compras")
 
@@ -29,6 +31,7 @@ public class Compra {
 	private Long id;
 	
 	//ManyToOne FK
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;

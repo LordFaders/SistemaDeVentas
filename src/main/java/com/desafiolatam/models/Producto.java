@@ -20,6 +20,9 @@ import javax.persistence.JoinColumn;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "productos")
 public class Producto {
@@ -42,7 +45,8 @@ public class Producto {
 	@NotNull
 	private Integer stock;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@JsonManagedReference
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "productos_ventas",
 			joinColumns = @JoinColumn(name = "producto_id"),
 			inverseJoinColumns = @JoinColumn(name="venta_id")

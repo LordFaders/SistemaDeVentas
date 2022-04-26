@@ -17,6 +17,9 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "productos_ventas")
 public class ProductosVentas {
@@ -28,12 +31,14 @@ public class ProductosVentas {
 	// ManyToMany = 2 ManyToOne
 
 	// 1 ManyToOne FK
-	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "producto_id")
 	private Producto producto;
 
 	// 2 ManyToOne FK
-	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference   //Lista = BackReference;  Objeto = ManagedReference
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "venta_id")
 	private Venta venta;
 	

@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name="clientes")
 
@@ -30,9 +32,11 @@ public class Cliente {
 	private String apellido;
 	private String email;
 	//OneToMany
+	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Compra> compras;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Venta> ventas;
 	

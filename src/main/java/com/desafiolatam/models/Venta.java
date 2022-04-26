@@ -20,6 +20,10 @@ import javax.persistence.JoinColumn;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "ventas")
 public class Venta {
@@ -27,22 +31,21 @@ public class Venta {
 	@Id // primary key
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotNull
 	private Float monto;
-	//private Integer cantidad;
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "productos_ventas",
-			joinColumns = @JoinColumn(name = "venta_id"),
-			inverseJoinColumns = @JoinColumn(name="producto_id")
-			)
+	// private Integer cantidad;
+	@JsonIgnore // BackReference para quienes NO tienen la FK
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "productos_ventas", joinColumns = @JoinColumn(name = "venta_id"), inverseJoinColumns = @JoinColumn(name = "producto_id"))
 	private List<Producto> productos;
-	
-	//ManyToOne FK
-		@ManyToOne(fetch = FetchType.LAZY)
-		@JoinColumn(name = "cliente_id")
-		private Cliente cliente;
-	
+
+	// ManyToOne FK
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
+
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
@@ -52,7 +55,7 @@ public class Venta {
 
 	public Venta() {
 		super();
-		
+
 	}
 
 	public Venta(Long id, Float monto, List<Producto> productos) {
@@ -86,8 +89,6 @@ public class Venta {
 		this.productos = productos;
 	}
 
-	
-	
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -111,7 +112,7 @@ public class Venta {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+
 	@PrePersist
 	protected void onCreate() {
 		this.createdAt = new Date();
@@ -121,5 +122,5 @@ public class Venta {
 	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
-	
+
 }
